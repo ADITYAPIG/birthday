@@ -27,7 +27,6 @@ const messages = [
 ];
 
 let jumpCount = 0;
-let sequenceRunning = false;
 const TOTAL_JUMPS = 6;
 
 function flashMessage(text){
@@ -67,24 +66,22 @@ function jumpOnce(){
         yesBtn.classList.add('pulse');
       }, 400);
     }, 250);
-    return;
   }
-
-  window.setTimeout(jumpOnce, 650);
 }
 
 noBtn.addEventListener('click', () => {
-  if (sequenceRunning) return;
-  sequenceRunning = true;
+  if (jumpCount >= TOTAL_JUMPS) return;
 
-  // capture the button's current on-screen position BEFORE switching to fixed jumping,
-  // then re-apply that exact spot as a transform so it doesn't visually snap
-  const rect = noBtn.getBoundingClientRect();
-  noBtn.classList.add('jumping');
-  noBtn.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+  if (jumpCount === 0){
+    // capture the button's current on-screen position BEFORE switching to fixed jumping,
+    // then re-apply that exact spot as a transform so it doesn't visually snap
+    const rect = noBtn.getBoundingClientRect();
+    noBtn.classList.add('jumping');
+    noBtn.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
 
-  // force reflow so the transform above applies before the first jump animates
-  void noBtn.offsetWidth;
+    // force reflow so the transform above applies before the first jump animates
+    void noBtn.offsetWidth;
+  }
 
   jumpOnce();
 });
